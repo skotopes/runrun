@@ -1,0 +1,65 @@
+{% macro render_pagination(pagination) %}
+<div class="pagination text-center">
+	<ul>
+		{% if pagination.has_prev %}
+			<li>
+				<a href="{{ url_for_other_page(pagination.prev_num) }}">Prev</a>
+			</li>
+		{% else %}
+			<li class="disabled"><a>Prev</a></li>
+		{% endif %}
+		
+		{%- for page in pagination.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+			{% if page %}
+				{% if page != pagination.page %}
+					<li>
+						<a href="{{ url_for_other_page(page) }}">{{ page }}</a>
+					</li>
+				{% else %}
+					<li class="disabled">
+						<a>{{ page }}</a>
+					</li>
+				{% endif %}
+			{% else %}
+				<li class="disabled"><a>…</a></li>
+			{% endif %}
+		{%- endfor %}
+		
+		{% if pagination.has_next %}
+			<li>
+				<a href="{{ url_for_other_page(pagination.next_num) }}">Next</a>
+			</li>
+		{% else %}
+			<li class="disabled"><a>Next</a></li>
+		{% endif %}
+	</ul>
+</div>
+{% endmacro %}
+
+{% macro render_field(field, form_group_class='form-group') %}
+	<div class="{{ form_group_class }}{% if field.errors %} has-error{% endif %}">
+		{% if field.type not in ('HiddenField', 'CSRFTokenField') -%}
+			{{ field.label }}
+		{%- endif %}
+		{{ field(class="form-control", **kwargs) }}
+		{% if field.errors %}
+			<span class="help-block">
+				{%- for error in field.errors -%}
+					{{ error }}{% if not loop.last %}, {% endif %}
+				{%- endfor -%}
+			</span>
+		{% endif %}
+	</div>
+{% endmacro %}
+
+{% macro render_form(form, controller) %}
+<form method="post" {% if controller %}action="{{ controller }}"{% endif %}>
+	{% for field in form -%}
+		{{ render_field(field) }}
+	{%- endfor %}
+	<div class="actions">
+		<input type="submit" class="btn btn-primary">&nbsp;
+		<button type="reset" class="btn">Cancel</button>
+	</div>
+</form>
+{% endmacro %}

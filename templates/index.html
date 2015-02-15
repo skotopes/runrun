@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<title>FFLC Places</title>
+		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+		<style type="text/css">
+			html, body, #runrun-container { height: 100%; margin: 0; padding: 0; }
+			#map-canvas { position: absolute; margin: 0; padding: 0; top: 50px; bottom: 0px; left: 0px; right: 0px; }
+			.navbar { margin-bottom: 0px; }
+			#contextmenu {
+				visibility: hidden;
+				background: #ffffff;
+				border:1px solid #8888FF;
+				z-index: 10;
+				position: relative;
+				padding: 10px;
+				width: auto;
+			}
+			.button-nav-padding {
+				padding-left: 3px;
+				padding-right: 3px;
+			}
+			.modal-backdrop {
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				height: auto !important; 
+			}
+			@media print {
+				#map-canvas { display: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px; }
+				.gmnoscreen { display: none !important; }
+				a { display: none !important; }
+			}
+		</style>
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<script src="{{ url_for('static', filename='js/jquery-1.11.2.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<script src="//fflcplaces.disqus.com/embed.js"></script>
+		<script src="{{ google_maps_url() }}"></script>
+		<script src="{{ url_for('static', filename='js/runrun.js') }}"></script>
+		<script type="text/javascript">
+			images_url = '{{ url_for('static', filename='images/markers') }}/';
+			places_all_url = '{{ url_for('places_all') }}';
+			places_form_url = '{{ url_for('places_form') }}';
+			places_delete_url = '{{ url_for('places_delete') }}';
+			groups = {{ groups|tojson|safe}};
+			account = {% if g.account %}{{ g.account.toDict()|tojson|safe}}{% else %}null{% endif %};
+			runrun();
+		</script>
+	</head>
+	<body>
+		<div id="placeInfoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="placeInfoModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title"><div id="placeInfoTitle"></div></h4>
+					</div>
+					<div class="modal-body">
+						<div id="placeInfoDescription"></div>
+						<div id="disqus_thread"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="commonModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="commonModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body"></div>
+				</div>
+			</div>
+		</div>
+		<div id="legendModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">Map legend</h4>
+					</div>
+					<div class="modal-body">
+						<ul class="list-unstyled">
+							{% for k,v in groups.items() -%}
+							<li><img width="30px" height="30px" src="{{ url_for('static', filename='images/markers/' + k + '.png') }}"><strong>{{ v.name }}</strong> - {{ v.description }}</li>
+							{%- endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="runrun-container">
+			<div id="map-canvas"></div>
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="{{ url_for('index') }}">FFLC Places</a>
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav navbar-right">
+							{% if g.account -%}
+							<li class="button-nav-padding">
+								<p class="navbar-btn">
+									<a href="{{ url_for('logout')}}" class="btn-block btn btn-default">Logout</a>
+								</p>
+							</li>
+							{%- endif %}
+							<li class="button-nav-padding">
+								<button type="button" class="btn-block btn btn-default navbar-btn" onClick="window.print()">Print</button>
+							</li>
+							<li class="button-nav-padding">
+								<button type="button" class="btn-block btn btn-default navbar-btn" data-toggle="modal" data-target="#legendModal">Legend</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% from "_utils.html" import render_form %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block style %}{% endblock %}
+{% block script %}{% endblock %}
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		{% if title %}<h1>{{ title }}</h1>{% endif %}
+		{{ render_form(form) }}
+	</div>
+</div>
+{% endblock %}

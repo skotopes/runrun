@@ -1,0 +1,42 @@
+{% from "_utils.html" import render_field %}
+<script>
+$("#place-form").submit(function() {
+	$.ajax({
+		type: 'POST',
+		url: '{{ url_for('places_form', **request.args) }}',
+		data: $("#place-form").serialize(),
+		success: function(data) {
+			if (data.hasOwnProperty('success') != true) {
+				$('#commonModal').find('.modal-title').text("Invalid server response.");
+				$('#commonModal').find('.modal-body').text("Server response is invalid. Place info was not saved. Try again later.");
+				$('#commonModal').modal('show');
+				return;
+			}
+			if (data.success.saved != true) {
+				$('#commonModal').find('.modal-title').text("Place form");
+				$('#commonModal').find('.modal-body').html(data.success.form);
+				$('#commonModal').modal('show');
+			} else {
+				$('#commonModal').modal('hide');
+				reloadMarkers();
+			}
+		}
+	});
+	$('#place-form *').prop("disabled", true);
+	return false;
+});
+</script>
+<form method="post" id="place-form">
+	<div class="row">
+	{{ render_field(form.csrf_token) }}
+	{{ render_field(form.group, "form-group col-sm-4", class="form-control input-sm") }}
+	{{ render_field(form.latitude, "form-group col-sm-4", class="form-control input-sm") }}
+	{{ render_field(form.longitude, "form-group col-sm-4", class="form-control input-sm") }}
+	{{ render_field(form.title, "form-group col-sm-12") }}
+	{{ render_field(form.description, "form-group col-sm-12", rows=5) }}
+	</div>
+	<div class="actions">
+		<input type="submit" class="btn btn-primary">&nbsp;
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	</div>
+</form>

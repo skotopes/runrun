@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ _('Login') }}{% endblock %}
+{% block style %}
+<style type="text/css" media="screen">
+	body {
+		padding-top: 40px;
+		padding-bottom: 40px;
+		background-color: #eee;
+	}
+	.form-signin {
+		max-width: 330px;
+		padding: 15px;
+		margin: 0 auto;
+	}
+	.form-signin .form-signin-heading {
+		margin-bottom: 10px;
+	}
+	.form-signin .form-control {
+		position: relative;
+		height: auto;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		padding: 10px;
+		font-size: 16px;
+	}
+	.form-signin .form-control:focus {
+		z-index: 2;
+	}
+	.form-signin .email {
+		margin-bottom: -1px;
+		border-bottom-right-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	.form-signin .password {
+		margin-bottom: 10px;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+</style>
+{% endblock %}
+{% block script %}{% endblock %}
+
+{% block content %}
+{% if form %}
+<form class="form-signin" role="form" method="POST" enctype="multipart/form-data">
+	<h2 class="form-signin-heading">{{ _('Login') }}</h2>
+	{{ form.csrf_token }}
+	<div class="form-group {% if form.errors %}has-error{% endif %}">
+		<input
+			name="email"
+			type="text"
+			class="form-control email"
+			placeholder="{{ _('Email') }}"
+			{%- if form.email.data %}value="{{ form.email.data }}"{% endif -%}
+			required
+			autofocus>
+		<input
+			name="password"
+			type="password"
+			class="form-control password"
+			placeholder="{{ _('Password') }}"
+			required>
+		<input
+			name="next"
+			type="hidden"
+			value="{{ form.next.data }}">
+		<p class="help-block">
+			{%- for f_n in form.errors -%}
+				{{ _(form[f_n].label.text) + ': ' }}
+				{%- for error in form[f_n].errors -%}
+					{{ error }}{% if not loop.last %} {% endif %}
+				{%- endfor -%}
+				<br>
+			{%- endfor -%}
+		</p>
+	</div>
+	<button class="btn btn-lg btn-primary btn-block" type="submit">{{ _('Login') }}</button>
+</form>
+{% else %}
+<form class="form-signin">
+	<h2 class="form-signin-heading">{{ message }}</h2>
+</form>
+{% endif %}
+{% endblock %}
