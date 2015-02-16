@@ -56,6 +56,13 @@ class Place(db.Model):
 			"created_at": self.created_at,
 			"group": self.group,
 			"title": self.title,
-			"description": markdown(self.description, output_format="html5")
+			"description": markdown(
+				self.description,
+				output_format="html5",
+				extensions=[
+					'markdown.extensions.tables',
+					'markdown.extensions.nl2br'
+				]
+			)
 		}
 	
