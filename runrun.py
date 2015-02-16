@@ -15,6 +15,13 @@ babel = Babel(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+if not app.debug:
+	import logging
+	from logging.handlers import SMTPHandler
+	mail_handler = SMTPHandler('127.0.0.1', app.config['MAIL_DEFAULT_SENDER'], app.config['MAIL_ADMIN_EMAILS'], 'RunRun error')
+	mail_handler.setLevel(logging.ERROR)
+	app.logger.addHandler(mail_handler)
+
 app.jinja_env.globals['groups'] = groups
 
 def google_maps_url():
