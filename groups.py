@@ -28,6 +28,14 @@ groups["bank"] = {
 	"name": "Banks",
 	"description": "Banks and other financial facilities." 
 }
+groups["sport"] = {
+	"name": "Sport and Health",
+	"description": "Sport clubs, stadiums, massage and etc." 
+}
+groups["entertainment"] = {
+	"name": "Entertainment",
+	"description": "Cinema, night clubs and etc."
+}
 groups["sightseeings"] = {
 	"name": "Sightseeings",
 	"description": "Sightseeings and some nice places which you probably will want to see." 
