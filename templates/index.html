@@ -49,6 +49,7 @@
 			places_all_url = '{{ url_for('places_all') }}';
 			places_form_url = '{{ url_for('places_form') }}';
 			places_delete_url = '{{ url_for('places_delete') }}';
+			contact_form_url = '{{ url_for('contact_form') }}';
 			groups = {{ groups|tojson|safe}};
 			account = {% if g.account %}{{ g.account.toDict()|tojson|safe}}{% else %}null{% endif %};
 			runrun();
@@ -128,6 +129,9 @@
 							</li>
 							<li class="button-nav-padding">
 								<button type="button" class="btn-block btn btn-default navbar-btn" data-toggle="modal" data-target="#legendModal">Legend</button>
+							</li>
+							<li class="button-nav-padding">
+								<button type="button" class="btn-block btn btn-default navbar-btn" onClick="contactUs()">Contact Us</button>
 							</li>
 						</ul>
 					</div>

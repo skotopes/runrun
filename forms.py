@@ -15,3 +15,7 @@ class PlaceForm(Form):
 	group		= SelectField("Group", choices=[ (k,v['name']) for k,v in groups.items()], validators=[ InputRequired() ])
 	title		= TextField("Title", validators=[ InputRequired() ])
 	description	= TextAreaField("Description (supports markdown)", validators=[ InputRequired() ])
+
+class ContactForm(Form):
+	email		= TextField('Email (Optional)', validators=[ Email() ])
+	text		= TextAreaField("How can we help you?", validators=[ InputRequired() ])

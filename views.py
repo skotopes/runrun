@@ -90,3 +90,14 @@ def places_delete():
 	db.session.delete(place)
 	db.session.commit()
 	return jsonify(success={})
+
+@app.route('/contact/form', methods=['GET', 'POST'])
+def contact_form():
+	contact_form = ContactForm()
+	if contact_form.validate_on_submit():
+		msg = Message("FFLC care service")
+		msg.add_recipient(app.config['MAIL_ADMIN_EMAILS'])
+		msg.body = render_template("mail/contact.txt", form=contact_form)
+		mail.send(msg)
+		return jsonify(success={ "saved": True })
+	return jsonify(success={ "saved": False, "form": render_template("contact_form.html", form=contact_form)})

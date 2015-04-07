@@ -104,6 +104,23 @@ function deletePlace(place_id) {
 		$('#commonModal').modal('show');
 	});
 };
+function contactUs() {
+	$.get(contact_form_url, function(data){
+		if (data.hasOwnProperty('success') != true) {
+			$('#commonModal').find('.modal-title').text("Invalid server response.");
+			$('#commonModal').find('.modal-body').text("Server response is invalid. No markers was loaded. Try again later.");
+			$('#commonModal').modal('show');
+			return;
+		}
+		$('#commonModal').find('.modal-title').text("Contact form");
+		$('#commonModal').find('.modal-body').html(data.success.form);
+		$('#commonModal').modal('show');
+	}).fail(function(data){
+		$('#commonModal').find('.modal-title').text("Server communication error.");
+		$('#commonModal').find('.modal-body').text("Server communication error. Can not get form. Try again later.");
+		$('#commonModal').modal('show');
+	});
+};
 function makeMarkerOnClick(marker_data) {
 	return function() {
 		var controls = '';

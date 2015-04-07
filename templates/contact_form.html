@@ -3,7 +3,7 @@
 $("#place-form").submit(function() {
 	$.ajax({
 		type: 'POST',
-		url: '{{ url_for('places_form', **request.args) }}',
+		url: '{{ url_for('contact_form', **request.args) }}',
 		data: $("#place-form").serialize(),
 		success: function(data) {
 			if (data.hasOwnProperty('success') != true) {
@@ -12,18 +12,20 @@ $("#place-form").submit(function() {
 				$('#commonModal').modal('show');
 				return;
 			}
+			
 			if (data.success.saved != true) {
-				$('#commonModal').find('.modal-title').text("Place form");
+				$('#commonModal').find('.modal-title').text("Contact form");
 				$('#commonModal').find('.modal-body').html(data.success.form);
 				$('#commonModal').modal('show');
 			} else {
-				$('#commonModal').modal('hide');
-				reloadMarkers();
+				$('#commonModal').find('.modal-title').text("Thank you for your feedback.");
+				$('#commonModal').find('.modal-body').text("Your message was sent to those who care. Please hold the line, we will send responce sortly (^_^).");
+				$('#commonModal').modal('show');
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			$('#commonModal').find('.modal-title').text("Server communication error.");
-			$('#commonModal').find('.modal-body').text("Server communication error. Place was not saved. Try again later.");
+			$('#commonModal').find('.modal-body').text("Server communication error. Data was not sent. Try again later.");
 			$('#commonModal').modal('show');
 		}
 	});
@@ -34,11 +36,8 @@ $("#place-form").submit(function() {
 <form method="post" id="place-form">
 	<div class="row">
 	{{ render_field(form.csrf_token) }}
-	{{ render_field(form.group, "form-group col-sm-4", class="form-control input-sm") }}
-	{{ render_field(form.latitude, "form-group col-sm-4", class="form-control input-sm") }}
-	{{ render_field(form.longitude, "form-group col-sm-4", class="form-control input-sm") }}
-	{{ render_field(form.title, "form-group col-sm-12") }}
-	{{ render_field(form.description, "form-group col-sm-12", rows=13) }}
+	{{ render_field(form.email, "form-group col-sm-12") }}
+	{{ render_field(form.text, "form-group col-sm-12", rows=8) }}
 	</div>
 	<div class="actions">
 		<input type="submit" class="btn btn-primary">&nbsp;
