@@ -95,8 +95,7 @@ def places_delete():
 def contact_form():
 	contact_form = ContactForm()
 	if contact_form.validate_on_submit():
-		msg = Message("FFLC care service")
-		msg.add_recipient(app.config['MAIL_ADMIN_EMAILS'])
+		msg = Message("FFLC care service", recipients=app.config['MAIL_ADMIN_EMAILS'])
 		msg.body = render_template("mail/contact.txt", form=contact_form)
 		mail.send(msg)
 		return jsonify(success={ "saved": True })
