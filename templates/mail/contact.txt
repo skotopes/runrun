@@ -1,2 +1,2 @@
-Email address: {{ form.email }}
-Text: {{ form.text }}
+Email address: {{ form.email.data }}
+Text: {{ form.text.data }}
