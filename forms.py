@@ -17,5 +17,5 @@ class PlaceForm(Form):
 	description	= TextAreaField("Description (supports markdown)", validators=[ InputRequired() ])
 
 class ContactForm(Form):
-	email		= TextField('Email (Optional)', validators=[ Email() ])
+	email		= TextField('Email', validators=[ Email() ])
 	text		= TextAreaField("How can we help you?", validators=[ InputRequired() ])
